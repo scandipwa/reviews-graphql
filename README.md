@@ -85,3 +85,17 @@ query GetProductReviews($product_sku: String!) {
     "product_sku": "n31191497"
 }
 ```
+
+### getRatings
+```graphql
+query GetRatings {
+    getRatings {
+        rating_id
+        rating_code
+        rating_options {
+            option_id
+            value
+        }
+    }
+}
+```

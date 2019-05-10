@@ -16,6 +16,7 @@ type Mutation {
 
 type Query {
     getProductReviews(product_sku: String!): [ReviewItem] @resolver(class:"\\ScandiPWA\\ReviewsGraphQl\\Model\\Resolver\\GetProductReviews")
+    getRatings: [RatingItem] @resolver(class:"\\ScandiPWA\\ReviewsGraphQl\\Model\\Resolver\\GetRatings")
 }
 
 input RatingInput {
@@ -29,6 +30,17 @@ input ProductReviewInput {
     detail: String!,
     rating_data: [RatingInput]
     product_sku: String!
+}
+
+type RatingOptionItem {
+    option_id: Int @doc(description: "The rating option ID")
+    value: Int @doc(description: "The rating option value")
+}
+
+type RatingItem {
+    rating_id: Int @doc(description: "The rating ID")
+    rating_code: String @doc(description: "The rating code name")
+    rating_options: [RatingOptionItem]
 }
 
 type RatingVoteItem {
