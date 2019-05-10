@@ -1,0 +1,72 @@
+# ScandiPWA - Progressive Web App for Magento
+#
+# Copyright © Scandiweb, Inc. All rights reserved.
+# See LICENSE for license details.
+#
+# @license OSL-3.0 (Open Software License ("OSL") v. 3.0)
+# @package scandipwa/reviews-graphql
+# @link https://github.com/scandipwa/reviews-graphql
+#
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    addProductReview(productReviewItem: ProductReviewInput!): ReviewItem @resolver(class:"\\ScandiPWA\\ReviewsGraphQl\\Model\\Resolver\\AddProductReview")
+}
+
+type Query {
+    getProductReviews(product_sku: String!): [ReviewItem] @resolver(class:"\\ScandiPWA\\ReviewsGraphQl\\Model\\Resolver\\GetProductReviews")
+}
+
+input RatingInput {
+    rating_id: Int!,
+    option_id: Int!
+}
+
+input ProductReviewInput {
+    nickname: String!,
+    title: String!,
+    detail: String!,
+    rating_data: [RatingInput]
+    product_sku: String!
+}
+
+type RatingVoteItem {
+    vote_id: Int @doc(description: "The rating vote ID")
+    option_id: Int @doc(description: "The ID of the associated rating option")
+    remote_ip: String @doc(description: "The customer IP")
+    remote_ip_long: Int @doc(description: "The customer IP as long integer")
+    customer_id: Int @doc(description: "The ID of the customer who added the rating")
+    entity_pk_value: Int @doc(description: "The ID of the product for which the rating vote was added")
+    rating_id: Int @doc(description: "The ID of the associated rating")
+    review_id: Int @doc(description: "The ID of the associated review")
+    percent: Int @doc(description: "The rating vote percent value")
+    value: Int @doc(description: "The rating vote value")
+    rating_code: String @doc(description: "Code name for the associated rating")
+    store_id: Int @doc(description: "The ID of the sore for which the rating vote was added")
+}
+
+type ReviewItem {
+    review_id: Int @doc(description: "The review ID")
+    entity_id: Int @doc(description: "The review entity ID")
+    entity_code: String @doc(description: "The review entity code")
+    entity_pk_value: Int @doc(description: "The ID of the product for which the review is added")
+    status_id: Int @doc(description: "The status ID for the review")
+    store_id: Int @doc(description: "The ID of the store from which the review is added")
+    customer_id: Int @doc(description: "The ID of the customer who added the review")
+    nickname: String @doc(description: "Customer nickname used to add the review")
+    title: String @doc(description: "Title of the review")
+    detail_id: Int @doc(description: "The ID of the review contents")
+    detail: String @doc(description: "Contents of the review")
+    created_at: String @doc(description: "The date and time when customer added the review")
+    rating_votes: [RatingVoteItem]
+}
+
+type ProductReviewSummary {
+    rating_summary: Int @doc(description: "The product rating summary percentage value")
+    review_count: Int @doc(description: "The product rating summary percentage value")
+}
+
+interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
+    review_summary: ProductReviewSummary @doc(description: "Object containing product review summary data") @resolver(class:"ScandiPWA\\ReviewsGraphQl\\Model\\Resolver\\Product\\ReviewSummary")
+}
