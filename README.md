@@ -4,39 +4,39 @@
 
 Module also adds new fields to `ProductInterface`:
 
-- `review_summary` which includes information about product review summary:
+-   `review_summary` which includes information about product review summary:
 
-    - `rating_summary`,
+    -   `rating_summary`,
 
-    - `review_count`.
+    -   `review_count`.
     
-- `reviews` - a list of product reviews containing following review information:
+-   `reviews` - a list of product reviews containing following review information:
 
-    - `review_id`,
+    -   `review_id`,
 
-    - `entity_id`,
+    -   `entity_id`,
     
-    - `entity_code`,
+    -   `entity_code`,
     
-    - `entity_pk_value`,
+    -   `entity_pk_value`,
     
-    - `status_id`,
+    -   `status_id`,
     
-    - `store_id`,
+    -   `store_id`,
     
-    - `customer_id`,
+    -   `customer_id`,
     
-    - `nickname`,
+    -   `nickname`,
     
-    - `title`,
+    -   `title`,
     
-    - `detail_id`,
+    -   `detail_id`,
     
-    - `detail`,
+    -   `detail`,
     
-    - `created_at`,
+    -   `created_at`,
     
-    - `rating_votes`.
+    -   `rating_votes`.
 
 ### addProductReview
 ```graphql
