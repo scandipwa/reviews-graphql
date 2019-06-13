@@ -13,13 +13,13 @@
 declare(strict_types=1);
 
 
-namespace ScandiPWA\ReviewsGraphQl\Model\Resolver;
+namespace ScandiPWA\ReviewsGraphQl\Model\Resolver\Product;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Review\Model\ResourceModel\Review\Collection as ReviewCollection;
 use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
 use Magento\Review\Model\ReviewFactory;
@@ -27,11 +27,11 @@ use Magento\Review\Model\Review;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class GetProductReviews
+ * Class Reviews
  *
- * @package ScandiPWA\ReviewsGraphQl\Model\Resolver
+ * @package ScandiPWA\ReviewsGraphQl\Model\Resolver\Product
  */
-class GetProductReviews implements ResolverInterface
+class Reviews implements ResolverInterface
 {
     /**
      * Review collection
@@ -39,11 +39,6 @@ class GetProductReviews implements ResolverInterface
      * @var ReviewCollection
      */
     protected $reviewCollection;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    protected $productRepository;
 
     /**
      * @var ReviewFactory
@@ -61,20 +56,17 @@ class GetProductReviews implements ResolverInterface
     protected $reviewCollectionFactory;
 
     /**
-     * GetProductReviews constructor.
+     * Reviews constructor.
      *
-     * @param ProductRepositoryInterface $productRepository
      * @param ReviewFactory $reviewFactory
      * @param StoreManagerInterface $storeManager
      * @param CollectionFactory $reviewCollectionFactory
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         ReviewFactory $reviewFactory,
         StoreManagerInterface $storeManager,
         CollectionFactory $reviewCollectionFactory
     ) {
-        $this->productRepository = $productRepository;
         $this->reviewFactory = $reviewFactory;
         $this->storeManager = $storeManager;
         $this->reviewCollectionFactory = $reviewCollectionFactory;
@@ -90,10 +82,12 @@ class GetProductReviews implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['product_sku'])) {
-            throw new GraphQlInputException(__('Please specify a valid product'));
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
+        /** @var Product $product */
+        $product = $value['model'];
         $reviewData = [];
 
         if ($this->reviewCollection === null) {
@@ -103,7 +97,7 @@ class GetProductReviews implements ResolverInterface
                 Review::STATUS_APPROVED
             )->addEntityFilter(
                 'product',
-                $this->productRepository->get($args['product_sku'])->getId()
+                $product->getId()
             )->setDateOrder();
         }
 

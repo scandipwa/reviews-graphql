@@ -2,13 +2,41 @@
 
 **ReviewsGraphQl** provides basic types and resolvers for adding and displaying customer reviews.
 
-Module also adds a new field to `ProductInterface`:
+Module also adds new fields to `ProductInterface`:
 
-- `review_summary` which includes information about product reviews:
+-   `review_summary` which includes information about product review summary:
 
-    - `rating_summary`,
+    -   `rating_summary`,
 
-    - `review_count`.
+    -   `review_count`.
+    
+-   `reviews` - a list of product reviews containing following review information:
+
+    -   `review_id`,
+
+    -   `entity_id`,
+    
+    -   `entity_code`,
+    
+    -   `entity_pk_value`,
+    
+    -   `status_id`,
+    
+    -   `store_id`,
+    
+    -   `customer_id`,
+    
+    -   `nickname`,
+    
+    -   `title`,
+    
+    -   `detail_id`,
+    
+    -   `detail`,
+    
+    -   `created_at`,
+    
+    -   `rating_votes`.
 
 ### addProductReview
 ```graphql
@@ -45,44 +73,6 @@ mutation AddProductReview($productReviewItem: ProductReviewInput!) {
             }
         ]
     }
-}
-```
-### getProductReviews
-```graphql
-query GetProductReviews($product_sku: String!) {
-    getProductReviews(product_sku: $product_sku) {
-        review_id
-        entity_id
-        entity_code
-        entity_pk_value
-        status_id
-        customer_id
-        nickname
-        title
-        detail_id
-        detail
-        created_at
-        rating_votes {
-            vote_id
-            option_id
-            remote_ip
-            remote_ip_long
-            customer_id
-            entity_pk_value
-            rating_id
-            review_id
-            percent
-            value
-            rating_code
-            store_id
-        }
-    }
-}
-```
-
-```json
-{
-    "product_sku": "n31191497"
 }
 ```
 
