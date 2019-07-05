@@ -21,6 +21,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Review\Model\Rating;
 use Magento\Review\Model\Rating\Option as RatingOption;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Review\Model\ResourceModel\Rating\Collection;
 use Magento\Review\Model\ResourceModel\Rating\CollectionFactory as RatingCollectionFactory;
 
 /**
@@ -41,6 +42,11 @@ class GetRatings implements ResolverInterface
     protected $ratingCollectionFactory;
 
     /**
+     * @var Collection
+     */
+    protected $ratingCollection;
+
+    /**
      * GetRatings constructor.
      *
      * @param StoreManagerInterface $storeManager
@@ -48,8 +54,10 @@ class GetRatings implements ResolverInterface
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        RatingCollectionFactory $ratingCollectionFactory
+        RatingCollectionFactory $ratingCollectionFactory,
+        Collection $ratingCollection
     ) {
+        $this->ratingCollection = $ratingCollection;
         $this->storeManager = $storeManager;
         $this->ratingCollectionFactory = $ratingCollectionFactory;
     }
@@ -65,16 +73,7 @@ class GetRatings implements ResolverInterface
         array $args = null
     ) {
         $ratingData = [];
-
-        $ratings = $this->ratingCollectionFactory->create()->addEntityFilter(
-            'product'
-        )->setPositionOrder()->addRatingPerStoreName(
-            $this->storeManager->getStore()->getId()
-        )->setStoreFilter(
-            $this->storeManager->getStore()->getId()
-        )->setActiveFilter(
-            true
-        )->load()->addOptionToItems();
+        $ratings = $this->ratingCollection->addOptionToItems()->getItems();
 
         /**
          * @var Rating $rating
