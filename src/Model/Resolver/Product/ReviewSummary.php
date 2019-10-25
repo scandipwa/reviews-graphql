@@ -64,7 +64,9 @@ class ReviewSummary implements ResolverInterface
         $product = $value['model'];
         $ratingSummary = $product->getRatingSummary();
 
-        if (!$ratingSummary) return [];
+        if (!$ratingSummary) {
+            return [];
+        }
 
         return [
             'rating_summary' => $ratingSummary->getRatingSummary(),
