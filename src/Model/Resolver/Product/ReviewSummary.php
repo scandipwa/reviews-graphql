@@ -31,6 +31,11 @@ use Magento\Store\Model\StoreManagerInterface;
 class ReviewSummary implements ResolverInterface
 {
     /**
+     * @var ReviewFactory
+     */
+    protected $reviewFactory;
+
+    /**
      * @var StoreManagerInterface
      */
     protected $storeManager;
@@ -38,11 +43,14 @@ class ReviewSummary implements ResolverInterface
     /**
      * ReviewSummary constructor.
      *
+     * @param ReviewFactory $reviewFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
+        ReviewFactory $reviewFactory,
         StoreManagerInterface $storeManager
     ) {
+        $this->reviewFactory = $reviewFactory;
         $this->storeManager = $storeManager;
     }
 
@@ -62,11 +70,14 @@ class ReviewSummary implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-        $ratingSummary = $product->getRatingSummary();
+        $storeId = $this->storeManager->getStore()->getId();
+        $this->reviewFactory->create()->getEntitySummary($product, $storeId);
+        $ratingSummary = $product->getRatingSummary()->getRatingSummary();
+        $reviewCount = $product->getRatingSummary()->getReviewsCount();
 
         return [
-            'rating_summary' => $ratingSummary->getRatingSummary(),
-            'review_count' => $ratingSummary->getReviewsCount()
+            'rating_summary' => $ratingSummary,
+            'review_count' => $reviewCount
         ];
     }
 }
