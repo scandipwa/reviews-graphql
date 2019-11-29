@@ -73,7 +73,7 @@ class GetRatings implements ResolverInterface
         array $args = null
     ) {
         $ratingData = [];
-        $ratings = $this->ratingCollection->addOptionToItems()->getItems();
+        $ratings = $this->ratingCollection->setActiveFilter()->addOptionToItems()->getItems();
 
         /**
          * @var Rating $rating
