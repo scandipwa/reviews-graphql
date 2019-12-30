@@ -12,7 +12,6 @@
 
 declare(strict_types=1);
 
-
 namespace ScandiPWA\ReviewsGraphQl\Model\Resolver\Product;
 
 use Magento\Catalog\Model\Product;
@@ -20,8 +19,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Review\Model\ReviewFactory;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class GetProductReviews
@@ -30,30 +27,6 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class ReviewSummary implements ResolverInterface
 {
-    /**
-     * @var ReviewFactory
-     */
-    protected $reviewFactory;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * ReviewSummary constructor.
-     *
-     * @param ReviewFactory $reviewFactory
-     * @param StoreManagerInterface $storeManager
-     */
-    public function __construct(
-        ReviewFactory $reviewFactory,
-        StoreManagerInterface $storeManager
-    ) {
-        $this->reviewFactory = $reviewFactory;
-        $this->storeManager = $storeManager;
-    }
-
     /**
      * @inheritdoc
      */
@@ -70,14 +43,15 @@ class ReviewSummary implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-        $storeId = $this->storeManager->getStore()->getId();
-        $this->reviewFactory->create()->getEntitySummary($product, $storeId);
-        $ratingSummary = $product->getRatingSummary()->getRatingSummary();
-        $reviewCount = $product->getRatingSummary()->getReviewsCount();
+        $ratingSummary = $product->getRatingSummary();
+
+        if (!$ratingSummary) {
+            return [];
+        }
 
         return [
-            'rating_summary' => $ratingSummary,
-            'review_count' => $reviewCount
+            'rating_summary' => $ratingSummary->getRatingSummary(),
+            'review_count' => $ratingSummary->getReviewsCount()
         ];
     }
 }
