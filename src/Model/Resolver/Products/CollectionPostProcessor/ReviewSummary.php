@@ -1,25 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * ScandiPWA - Progressive Web App for Magento
+ *
+ * Copyright © Scandiweb, Inc. All rights reserved.
+ * See LICENSE for license details.
+ *
+ * @license OSL-3.0 (Open Software License ('OSL') v. 3.0)
+ * @package scandipwa/reviews-graphql
+ * @link    https://github.com/scandipwa/reviews-graphql
  */
+
 declare(strict_types=1);
 
-namespace ScandiPWA\ReviewsGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor;
+namespace ScandiPWA\ReviewsGraphQl\Model\Resolver\Products\CollectionPostProcessor;
 
-use Magento\Review\Model\ResourceModel\Review\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Review\Model\ResourceModel\Review\Product\Collection as ProductCollection;
 use Magento\Review\Model\Review;
+use ScandiPWA\Performance\Api\ProductsCollectionPostProcessorInterface;
 
-/**
- * Adds passed in attributes to product collection results
- *
- * {@inheritdoc}
- */
-class ReviewProcessor implements CollectionProcessorInterface
+class ReviewSummary implements ProductsCollectionPostProcessorInterface
 {
     const REVIEW_SUMMARY = 'review_summary';
 
@@ -39,19 +40,14 @@ class ReviewProcessor implements CollectionProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @throws NoSuchEntityException
      */
     public function process(
         Collection $collection,
-        SearchCriteriaInterface $searchCriteria,
         array $attributeNames
     ): Collection {
-        foreach ($attributeNames as $name) {
-            if ($name !== self::REVIEW_SUMMARY) {
-                continue;
-            }
-
+        if (in_array(self::REVIEW_SUMMARY, $attributeNames)) {
             /** @var $collection ProductCollection */
             $this->review->appendSummary($collection);
         }
