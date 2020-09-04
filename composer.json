@@ -2,34 +2,23 @@
     "name": "scandipwa/reviews-graphql",
     "description": "N/A",
     "type": "magento2-module",
+    "license": [
+        "OSL-3.0"
+    ],
     "require": {
-        "magento/magento2-base": "^2.3.1",
+        "magento/framework": "*",
+        "magento/module-customer": "*",
+        "magento/module-catalog": "*",
+        "magento/module-store": "*",
+        "magento/module-review": "^100.3",
         "scandipwa/performance": "^1.0"
     },
-    "support": {
-        "source": "https://github.com/scandipwa/reviews-graphql",
-        "email": "info@scandiweb.com"
-    },
-    "authors": [
-        {
-            "name": "Indars Lejins",
-            "email": "indars@scandiweb.com"
-        },
-        {
-            "name": "Alfreds Genkins",
-            "email": "alfreds@scandiweb.com"
-        }
-    ],
-    "license": [
-      "OSL-3.0",
-      "AFL-3.0"
-    ],
     "autoload": {
-      "files": [
-        "src/registration.php"
-      ],
-      "psr-4": {
-        "ScandiPWA\\ReviewsGraphQl\\": "src"
-      }
+        "files": [
+            "src/registration.php"
+        ],
+        "psr-4": {
+            "ScandiPWA\\ReviewsGraphQl\\": "src"
+        }
     }
 }
