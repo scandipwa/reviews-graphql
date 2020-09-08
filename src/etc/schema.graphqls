@@ -78,8 +78,7 @@ type ProductReviewSummary {
     review_count: Int @doc(description: "The product rating summary percentage value")
 }
 
-interface ProductInterface  {
-#interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
-    review_summary: ProductReviewSummary @resolver(class:"ScandiPWA\\Performance\\Model\\Resolver\\Value")
+interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
+    review_summary: ProductReviewSummary @doc(description: "Object containing product review summary data") @resolver(class:"ScandiPWA\\Performance\\Model\\Resolver\\Value")
     reviews: [ReviewItem] @doc(description: "List of product reviews") @resolver(class:"ScandiPWA\\ReviewsGraphQl\\Model\\Resolver\\Product\\Reviews")
 }

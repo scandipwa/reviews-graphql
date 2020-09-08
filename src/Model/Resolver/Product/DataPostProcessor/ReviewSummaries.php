@@ -94,12 +94,18 @@ class ReviewSummaries implements ProductsDataPostProcessorInterface
 
                 foreach ($reviewSummaries as $summary) {
                     if ($productId === $summary->getData()['entity_pk_value']) {
+                        $ratingSummary = $summary->getRatingSummary();
+                        $reviewsCount = $summary->getReviewsCount();
 
                         $productData['review_summary'] = [
-                            'rating_summary' => $summary->getRatingSummary(),
-                            'review_count' => $summary->getReviewsCount()
+                            'rating_summary' => $ratingSummary,
+                            'review_count' => $reviewsCount
                         ];
                     }
+                    else {
+                        $productData['review_summary'] = [];
+                    }
+
                 }
         };
     }
