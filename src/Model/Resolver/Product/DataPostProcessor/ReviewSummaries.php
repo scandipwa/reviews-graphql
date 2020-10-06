@@ -7,7 +7,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use ScandiPWA\Performance\Api\ProductsDataPostProcessorInterface;
 use ScandiPWA\Performance\Model\Resolver\ResolveInfoFieldsTrait;
 
-
 /**
  * Class ReviewSummary
  * @package ScandiPWA\ReviewsGraphQl\Model\Resolver\Product\DataPostProcessor
@@ -28,7 +27,6 @@ class ReviewSummaries implements ProductsDataPostProcessorInterface
      */
     protected $storeManager;
 
-
     /**
      * Products constructor.
      * @param CollectionFactory $collectionFactory
@@ -45,8 +43,8 @@ class ReviewSummaries implements ProductsDataPostProcessorInterface
 
     protected function getFieldContent($node)
     {
-
         $reviewSummaries = [];
+
         foreach ($node->selectionSet->selections as $selection) {
             if (!isset($selection->name)) {
                 continue;
@@ -62,9 +60,6 @@ class ReviewSummaries implements ProductsDataPostProcessorInterface
         return $reviewSummaries;
     }
 
-
-    private $reviewSummaries;
-
     function process(
         array $products,
         string $graphqlResolvePath,
@@ -72,8 +67,6 @@ class ReviewSummaries implements ProductsDataPostProcessorInterface
         ?array $processorOptions = []
     ): callable
     {
-
-
         $fields = $this->getFieldsFromProductInfo(
             $graphqlResolveInfo,
             $graphqlResolvePath
@@ -97,13 +90,12 @@ class ReviewSummaries implements ProductsDataPostProcessorInterface
                         $ratingSummary = $summary->getRatingSummary();
                         $reviewsCount = $summary->getReviewsCount();
 
-                        $productData['review_summary'] = [
+                        $productData[self::REVIEW_SUMMARY] = [
                             'rating_summary' => $ratingSummary,
                             'review_count' => $reviewsCount
                         ];
-                    }
-                    else {
-                        $productData['review_summary'] = [];
+                    } else {
+                        $productData[self::REVIEW_SUMMARY] = [];
                     }
 
                 }
